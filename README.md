@@ -6,4 +6,4 @@ First, get the circle at the joint port according to the direction vector and th
 First obtain the circle at the joint port (the joint is a cylindrical shape) according to the direction vector and the axis length of the joint,
 then obtain the sampling coordinate points of the circle at the port (99), and calculate the sampling point of the circle at the two joint ports distance.Get the two points with 
 the smallest distance, we think that the center point is similar to the intersection of the axis.
-<img src="http://www.mathchina.net/dvbbs/UploadFile/2010-9/20109616273772139.gif" width = "300" height = "30" alt="tencent" align=center />
+<img src="https://github.com/KingWangJL/Location-optimization/blob/master/9.gif" width = "300" height = "30" alt="tencent" align=center />
