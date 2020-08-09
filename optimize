@@ -1,0 +1,83 @@
+import math
+import numpy as np
+# d 表示一个点，n表示方向向量，l表示沿方向向量的长度 得到圆心
+def getDot(d,n,l):
+    t = math.sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2)
+
+    x = [d[0] + (l*n[0]) / (2*t)]
+    y = [d[1] + (l*n[1]) / (2*t)]
+    z = [d[2] + (l*n[2]) / (2*t)]
+
+    print("x:",x,"y:",y,"z:",z)
+    return (x,y,z)
+# 归一化的函数
+def norm(n):
+    t = math.sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2)
+    t1 = float(n[0])/t
+    t2 = float(n[1])/t
+    t3 = float(n[2])/t
+    p =(t1,t2,t3)
+    return p
+
+
+def getCoor(center_A,n,r):
+    c = []  # 存放余弦函数
+    s = []  # 存放正弦函数
+    t = [2 * math.pi / i for i in range(1, 100)]
+    for i in t:
+        c.append(math.cos(i))
+        s.append(math.sin(i))
+    c = np.array(c)
+    s = np.array(s)
+    # 表示圆所在平面上的一个向量
+    u = np.array((n[1], -n[0], 0))
+    # 表示一个与u和n都正交的向量，且向量v肯定也在圆所在的平面上
+    v = (n[0] * n[2], n[1] * n[2], -n[0] ** 2 - n[1] ** 2)
+    norm_u = norm(u)
+    norm_v = norm(v)
+    coordinates = []
+    x = center_A[0] + r * (norm_u[0] * c + norm_v[0] * s)
+    y = center_A[1] + r * (norm_u[1] * c + norm_v[1] * s)
+    z = center_A[2] + r * (norm_u[2] * c + norm_v[2] * s)
+    for i in range(len(x)):
+        coordinates.append((x[i], y[i], z[i]))
+    return coordinates
+
+
+def GaussDistance(coor1,coor2):
+    distance = math.sqrt((coor1[0]-coor2[0])**2+(coor1[1]-coor2[1])**2+(coor1[2]-coor2[2])**2)
+    return distance
+
+def minDistance(coordinates1,coordinate2):
+    min = 1000000
+    min_i,min_j = 0,0
+    for i in coordinates1:
+        for j in coordinate2:
+            distance = GaussDistance(i,j)
+            if distance < min:
+                min = distance
+                min_i = i
+                min_j = j
+    return min_i,min_j
+
+def centerDot(coor1,coor2):
+    center = ((coor2[0]+coor1[0])/2,(coor2[1]+coor1[1])/2,(coor2[2]+coor1[2])/2)
+    return center
+# mark的坐标，轴长，半径，方向向量(两个不同的方向(大mark-小mark，小mark-大mark)，对应不同的方向向量)
+def optimize(coor,l,r,n1,n2):
+    center_A = getDot(coor,n1,l)
+    coor1 = getCoor(center_A, n1, r)
+    center_C = getDot(coor,n2,l)
+    coor2 = getCoor(center_C, n2, r)
+    minCoor1,minCoor2 = minDistance(coor1,coor2)
+    center = centerDot(minCoor1,minCoor2)
+    print(center)
+    return center
+b = (10,9,8) #mark的坐标
+n1 = np.array((15,20,30)) #方向向量 也就是圆所在平面的法向量
+n2 = np.array((10,9,8)) #方向向量 也就是圆所在平面的法向量
+# 表示轴的长度
+l = 10
+# 圆的半径
+r = l/2
+opyimize(b,l,r,n1,n2)
